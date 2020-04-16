@@ -1,12 +1,21 @@
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
+const cors = require('cors');
+const { environment } = require('./config');
+
+const indexRouter = require('./routes/index');
+const tweetRouter = require('./routes/tweets');
 
 app.use(morgan("dev"));
+app.use(express.json());
+app.use(cors({ origin: 'http://localhost:4000' }));
 
-app.get("/", (req, res) => {
-  res.send("Welcome to the express-sequelize-starter!");
-});
+//mount routes
+app.use('/', indexRouter);
+app.use('/tweets', tweetRouter);
+
+
 
 // Catch unhandled requests and forward to error handler.
 app.use((req, res, next) => {
